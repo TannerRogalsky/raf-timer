@@ -1,0 +1,43 @@
+{
+  "name": "raf-timer",
+  "version": "1.0.0",
+  "description": "An abstraction around requestionAnimationFrame.",
+  "main": "lib/index.js",
+  "jsnext:main": "src/index.js",
+  "scripts": {
+    "clean": "rimraf lib dist",
+    "lint": "eslint src",
+    "check": "npm run lint",
+    "build:lib": "babel src --out-dir lib",
+    "build:umd": "webpack src/index.js dist/stateful.js --config webpack.config.development.js",
+    "build:umd:min": "webpack src/index.js dist/stateful.min.js --config webpack.config.production.js",
+    "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
+    "preversion": "npm run clean && npm run check",
+    "version": "npm run build",
+    "postversion": "git push && git push --tags && npm run clean",
+    "prepublish": "npm run clean && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TannerRogalsky/raf-timer.git"
+  },
+  "keywords": [
+    "requestAnimationFrame",
+    "gameloop",
+    "game loop",
+    "timer"
+  ],
+  "author": "Tanner Rogalsky",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TannerRogalsky/raf-timer/issues"
+  },
+  "homepage": "https://github.com/TannerRogalsky/raf-timer#readme",
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "babel-loader": "^5.3.2",
+    "eslint": "^1.7.3",
+    "rimraf": "^2.4.3",
+    "webpack": "^1.12.2"
+  }
+}
