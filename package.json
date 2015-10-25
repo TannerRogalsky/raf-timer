@@ -6,11 +6,13 @@
   "jsnext:main": "src/index.js",
   "scripts": {
     "clean": "rimraf lib dist",
-    "lint": "eslint src",
-    "check": "npm run lint",
+    "test": "npm run build:tests && mocha-phantomjs spec/index.html",
+    "lint": "eslint src spec",
+    "check": "npm run lint && npm run test",
     "build:lib": "babel src --out-dir lib",
-    "build:umd": "webpack src/index.js dist/stateful.js --config webpack.config.development.js",
-    "build:umd:min": "webpack src/index.js dist/stateful.min.js --config webpack.config.production.js",
+    "build:tests": "webpack spec/index.js spec/dist/tests.js --config webpack.config.test.js",
+    "build:umd": "webpack src/index.js dist/raf-timer.js --config webpack.config.development.js",
+    "build:umd:min": "webpack src/index.js dist/raf-timer.min.js --config webpack.config.production.js",
     "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
     "preversion": "npm run clean && npm run check",
     "version": "npm run build",
@@ -34,9 +36,14 @@
   },
   "homepage": "https://github.com/TannerRogalsky/raf-timer#readme",
   "devDependencies": {
-    "babel": "^5.8.23",
+    "babel": "^5.8.29",
     "babel-loader": "^5.3.2",
+    "corejs": "^0.1.4",
     "eslint": "^1.7.3",
+    "expect": "^1.12.2",
+    "mocha-loader": "^0.7.1",
+    "mocha-phantomjs": "^3.6.0",
+    "phantomjs": "^1.9.18",
     "rimraf": "^2.4.3",
     "webpack": "^1.12.2"
   }
