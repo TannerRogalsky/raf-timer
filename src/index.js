@@ -29,8 +29,8 @@ export default class Timer {
   }
 
   step() {
-    const dt = (performance.now() - this.microTime) / 1000;
-    this.deltaTime = Math.max(0, Math.min(this.deltaTimeLimit, dt));
-    return this.microTime += dt * 1000;
+    const dt = (performance.now() - this.microTime);
+    this.deltaTime = Math.max(0, Math.min(this.deltaTimeLimit, dt / 1000));
+    return this.microTime += dt;
   }
 }
