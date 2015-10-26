@@ -11,4 +11,20 @@ describe('RAFTimer', function(){
     expect(instance).toExist();
     expect(instance).toBeA(RAFTimer);
   });
+
+  describe('#step', function(){
+    it('increments the time(ms) by the delta(s)', function(done) {
+      const timer = new RAFTimer();
+      const previousTime = timer.time;
+      process.nextTick(function(){
+        timer.step();
+        const newTime = timer.time;
+
+        expect(previousTime).toBeLessThan(newTime);
+        expect(newTime - previousTime).toEqual(timer.delta * 1000);
+
+        done();
+      }, 15);
+    });
+  });
 });
