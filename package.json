@@ -46,5 +46,14 @@
     "phantomjs": "^1.9.18",
     "rimraf": "^2.4.3",
     "webpack": "^1.12.2"
-  }
+  },
+  "npmName": "raf-timer",
+  "npmFileMap": [
+    {
+      "basePath": "/dist/",
+      "files": [
+        "*.js"
+      ]
+    }
+  ]
 }
