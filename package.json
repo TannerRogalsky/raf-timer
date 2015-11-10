@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
   "scripts": {
-    "clean": "rimraf lib dist",
+    "clean": "rimraf lib dist spec/dist",
     "test": "npm run build:tests && mocha-phantomjs spec/index.html",
     "lint": "eslint src spec",
     "check": "npm run lint && npm run test",
