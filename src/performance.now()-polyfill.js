@@ -9,22 +9,24 @@
 // if you want values similar to what you'd get with real perf.now, place this towards the head of the page
 // but in reality, you're just getting the delta between now() calls, so it's not terribly important where it's placed
 
-if ('performance' in window == false) {
-  window.performance = {};
-}
-
-Date.now = (Date.now || function () {  // thanks IE8
+const performance = 'performance' in window ? window.performance : {};
+const dateNow = (Date.now || function () {  // thanks IE8
   return new Date().getTime();
 });
 
-if ('now' in window.performance == false){
-  var nowOffset = Date.now();
+let now;
+if ('now' in performance == false){
+  var nowOffset = dateNow();
 
   if (performance.timing && performance.timing.navigationStart){
     nowOffset = performance.timing.navigationStart;
   }
 
-  window.performance.now = function now(){
-    return Date.now() - nowOffset;
+  now = function now(){
+    return dateNow() - nowOffset;
   };
+} else {
+  now = performance.now.bind(performance);
 }
+
+export default now;
