@@ -27,4 +27,29 @@ describe('RAFTimer', function(){
       }, 15);
     });
   });
+
+  describe('#nextFrame', function() {
+    it('fires the callback passed on the next animation frame', function(done) {
+      const timer = new RAFTimer();
+      timer.nextFrame(function() {
+        done();
+      });
+    });
+  });
+
+  describe('#cancelFrame', function(done) {
+    it('cancels a scheduled callback', function(done) {
+      const timer = new RAFTimer();
+      let hasRun = false;
+      timer.nextFrame(function() {
+        hasRun = true;
+        expect(true).toEqual(false);
+      });
+      timer.cancelFrame();
+      setTimeout(function() {
+        expect(hasRun).toEqual(false);
+        done();
+      }, 200);
+    });
+  });
 });
