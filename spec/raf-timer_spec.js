@@ -37,7 +37,7 @@ describe('RAFTimer', function(){
     });
   });
 
-  describe('#cancelFrame', function(done) {
+  describe('#cancelFrame', function() {
     it('cancels a scheduled callback', function(done) {
       const timer = new RAFTimer();
       let hasRun = false;

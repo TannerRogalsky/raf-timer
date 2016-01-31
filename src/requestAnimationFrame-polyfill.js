@@ -17,7 +17,7 @@ for(var x = 0; x < vendors.length && !requestAnimationFrame; ++x) {
 }
 
 if (!requestAnimationFrame) {
-  requestAnimationFrame = function(callback, element) {
+  requestAnimationFrame = function(callback) {
     let currTime = new Date().getTime();
     let timeToCall = Math.max(0, 16 - (currTime - lastTime));
     let id = window.setTimeout(function() { callback(currTime + timeToCall); }, timeToCall);
@@ -28,6 +28,6 @@ if (!requestAnimationFrame) {
 
 if (!cancelAnimationFrame) {
   cancelAnimationFrame = function(id) {
-      clearTimeout(id);
+    clearTimeout(id);
   };
 }
