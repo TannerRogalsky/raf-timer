@@ -1,16 +1,18 @@
 import now from './performance.now()-polyfill';
 import {requestAnimationFrame, cancelAnimationFrame} from './requestAnimationFrame-polyfill';
 
-const callbacks = {};
-const runCallbacks = function(dt) {
-  for (const key in callbacks) {
-    callbacks[key](dt);
-  }
-};
-
 let numCallbacks = 0;
 let callbackID = 0;
 let animationFrameID = null;
+
+const callbacks = {};
+const runCallbacks = function(dt) {
+  animationFrameID = null;
+  for (const key in callbacks) {
+    callbacks[key](dt);
+    delete callbacks[key];
+  }
+};
 
 export default class Timer {
   constructor(deltaTimeLimit = 0.25) {
@@ -25,6 +27,7 @@ export default class Timer {
 
     if (numCallbacks === 0) {
       cancelAnimationFrame(animationFrameID);
+      animationFrameID = null;
     }
   }
 
