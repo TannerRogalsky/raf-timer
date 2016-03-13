@@ -12,26 +12,12 @@ describe('RAFTimer', function(){
     expect(instance).toBeA(RAFTimer);
   });
 
-  describe('#step', function(){
-    it('increments the time(ms) by the delta(s)', function(done) {
-      const timer = new RAFTimer();
-      const previousTime = timer.time;
-      process.nextTick(function(){
-        timer.step();
-        const newTime = timer.time;
-
-        expect(previousTime).toBeLessThan(newTime);
-        expect(newTime - previousTime).toEqual(timer.delta * 1000);
-
-        done();
-      }, 15);
-    });
-  });
-
   describe('#nextFrame', function() {
     it('fires the callback passed on the next animation frame', function(done) {
       const timer = new RAFTimer();
-      timer.nextFrame(function() {
+      timer.nextFrame(function(dt) {
+        expect(dt).toBeA('number');
+        expect(dt).toBeGreaterThan(0);
         done();
       });
     });
@@ -49,7 +35,7 @@ describe('RAFTimer', function(){
       setTimeout(function() {
         expect(hasRun).toEqual(false);
         done();
-      }, 200);
+      }, 200); // 200 is just an arbitrary value that should be much larger than any reasonable dt
     });
   });
 });

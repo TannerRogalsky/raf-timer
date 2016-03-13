@@ -1,24 +1,28 @@
-import now from './performance.now()-polyfill';
 import {requestAnimationFrame, cancelAnimationFrame} from './requestAnimationFrame-polyfill';
 
 let numCallbacks = 0;
 let callbackID = 0;
-let animationFrameID = null;
+let internalRAFID = null;
 
+let previousCallbackTime = 0;
 const callbacks = {};
-const runCallbacks = function(dt) {
-  animationFrameID = null;
+const runCallbacks = function(time) {
+  internalRAFID = null;
+
+  const dt = time - previousCallbackTime;
   for (const key in callbacks) {
-    callbacks[key](dt);
+    const timer = callbacks[key];
+
+    timer.callback(dt);
+
+    delete timer.callback;
     delete callbacks[key];
   }
+  previousCallbackTime = time;
 };
 
 export default class Timer {
-  constructor(deltaTimeLimit = 0.25) {
-    this.microTime = now();
-    this.deltaTime = 0;
-    this.deltaTimeLimit = deltaTimeLimit;
+  constructor() {
     this.animationFrameID = null;
   }
 
@@ -26,37 +30,20 @@ export default class Timer {
     delete callbacks[this.animationFrameID];
 
     if (numCallbacks === 0) {
-      cancelAnimationFrame(animationFrameID);
-      animationFrameID = null;
+      cancelAnimationFrame(internalRAFID);
+      internalRAFID = null;
     }
   }
 
   nextFrame(callback) {
     const id = callbackID++;
     numCallbacks++;
-    callbacks[id] = callback;
+    this.callback = callback;
+    callbacks[id] = this;
     this.animationFrameID = id;
 
-    if (animationFrameID === null) {
-      animationFrameID = requestAnimationFrame(runCallbacks);
+    if (internalRAFID === null) {
+      internalRAFID = requestAnimationFrame(runCallbacks);
     }
-  }
-
-  get delta() {
-    return this.deltaTime;
-  }
-
-  get fps() {
-    return this.deltaTime === 0 ? 0 : 1 / this.deltaTime;
-  }
-
-  get time() {
-    return this.microTime;
-  }
-
-  step() {
-    const dt = (now() - this.microTime);
-    this.deltaTime = Math.max(0, Math.min(this.deltaTimeLimit, dt / 1000));
-    return this.microTime += dt;
   }
 }
