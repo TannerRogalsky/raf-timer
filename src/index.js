@@ -4,7 +4,7 @@ let numCallbacks = 0;
 let callbackID = 0;
 let internalRAFID = null;
 
-let previousCallbackTime = 0;
+let previousCallbackTime = Date.now();
 const callbacks = {};
 const runCallbacks = function(time) {
   internalRAFID = null;
